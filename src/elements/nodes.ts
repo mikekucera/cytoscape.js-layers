@@ -12,7 +12,7 @@ export interface INodeLayerOption extends IElementLayerOptions {
   /**
    * where to position the canvas / node relative to a node
    */
-  position: 'none' | 'top-left' | 'center';
+  position: 'none' | 'center' | 'top'| 'left' | 'right' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   /**
    * init function for the collection
    * @param nodes
@@ -191,11 +191,25 @@ export function renderPerNode(
         return r;
       },
       update: (elem, node, bb) => {
+        const pos = node.position();
         if (oDOM.position === 'top-left') {
           elem.style.transform = `${oDOM.transform}translate3d(${bb.x1}px,${bb.y1}px,0)`;
+        } else if (oDOM.position === 'top-right') {
+          elem.style.transform = `${oDOM.transform}translate3d(${bb.x2}px,${bb.y1}px,0)`;
+        } else if (oDOM.position === 'bottom-right') {
+          elem.style.transform = `${oDOM.transform}translate3d(${bb.x1}px,${bb.y2}px,0)`;
+        } else if (oDOM.position === 'bottom-left') {
+          elem.style.transform = `${oDOM.transform}translate3d(${bb.x2}px,${bb.y2}px,0)`;
         } else if (oDOM.position === 'center') {
-          const pos = node.position();
           elem.style.transform = `${oDOM.transform}translate3d(${pos.x}px,${pos.y}px,0)`;
+        } else if (oDOM.position === 'top') {
+          elem.style.transform = `${oDOM.transform}translate3d(${pos.x}px,${bb.y1}px,0)`;
+        } else if (oDOM.position === 'bottom') {
+          elem.style.transform = `${oDOM.transform}translate3d(${pos.x}px,${bb.y2}px,0)`;
+        } else if (oDOM.position === 'left') {
+          elem.style.transform = `${oDOM.transform}translate3d(${bb.x1}px,${pos.y}px,0)`;
+        } else if (oDOM.position === 'right') {
+          elem.style.transform = `${oDOM.transform}translate3d(${bb.x2}px,${pos.y}px,0)`;
         }
         render(elem, node, bb);
       },
